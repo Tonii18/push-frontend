@@ -1,0 +1,5 @@
+{
+    "editor.fontFamily": "Fira Code,'JetBrains Mono', Consolas, 'Courier New', monospace",
+    "workbench.iconTheme": "material-icon-theme",
+    "window.autoDetectColorScheme": true
+}

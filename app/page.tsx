@@ -2,12 +2,39 @@
 
 import Link from "next/link";
 import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import { login } from "@/app/services/auth.service";
 
 export default function Home() {
-  const [showPassword, setShowPassword] = useState(false);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setIsLoading(true);
+    setErrorMessage(null);
+
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+
+    try {
+
+      const data = await login({email, password});
+
+      localStorage.setItem("access_token", data.access_token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      router.push("/home");
+
+    } catch (error: any) {
+      setErrorMessage(error.message || 'Invalid credentials');
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -65,6 +92,13 @@ export default function Home() {
             <p className="mt-2 text-sm leading-6 text-[#a7b0a2]">
               Use the email tied to your training account.
             </p>
+
+            {/* Error alert: It is showed up if errorMessage has content */}
+            {errorMessage && (
+              <div className="mt-6 rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-400">
+                {errorMessage}
+              </div>
+            )}
 
             <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
               <div className="space-y-2">

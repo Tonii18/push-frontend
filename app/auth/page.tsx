@@ -2,15 +2,40 @@
 
 import Link from "next/link";
 import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import { register } from "@/app/services/auth.service";
 
 const fieldClassName =
   "h-12 w-full rounded-xl border border-white/10 bg-[#0c100b] px-4 text-sm outline-none transition placeholder:text-[#6d7668] focus:border-[#c6f135] focus:ring-4 focus:ring-[#c6f135]/15";
 
 export default function CreateAccountPage() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setIsLoading(true);
+    setErrorMessage(null);
+
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get('email') as string;
+    const name = formData.get('name') as string;
+    const phone = formData.get('phone') as string;
+    const password = formData.get('password') as string;
+
+    try {
+
+      await register({email, name, phone, password});
+
+      router.push("/");
+
+    } catch (error: any) {
+      setErrorMessage(error.message || 'An user with this email already exists');
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -71,6 +96,13 @@ export default function CreateAccountPage() {
               Email, username, phone number, and a password.
             </p>
 
+            {/* Error alert: It is showed up if errorMessage has content */}
+            {errorMessage && (
+              <div className="mt-6 rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-400">
+                {errorMessage}
+              </div>
+            )}
+
             <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
               <div className="space-y-2">
                 <label htmlFor="email" className="text-sm font-medium">
@@ -93,7 +125,7 @@ export default function CreateAccountPage() {
                 </label>
                 <input
                   id="username"
-                  name="username"
+                  name="name"
                   type="text"
                   autoComplete="username"
                   required
