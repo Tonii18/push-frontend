@@ -1,38 +1,38 @@
 # Push — Gym Routine Tracker
 
-Aplicación web desarrollada con **Next.js**, **React** y **Tailwind CSS** para organizar tu rutina semanal de gimnasio, personalizar el nombre de cada día de entrenamiento y registrar tus ejercicios.
+Web application built with **Next.js**, **React**, and **Tailwind CSS** to organize your weekly gym split, customize each day's routine title, and track your exercises.
 
-## ✨ Funcionalidades
+## ✨ Features
 
-- **Autenticación con JWT:** registro, inicio de sesión y protección de rutas mediante token.
-- **Organización semanal:** vista general de la semana y pantallas dinámicas por día (`monday` – `sunday`).
-- **Título editable por día:** personalización del nombre de cada sesión (ej. *Push Day*, *Upper Body*, *Leg Day*).
-- **Gestión de ejercicios:** formulario para añadir ejercicios y edición o borrado en línea (series, repeticiones y peso en `kg`).
+- **JWT authentication:** sign up, sign in, and protected routes with bearer tokens.
+- **Weekly schedule:** overview of the week and dynamic pages per day (`monday` – `sunday`).
+- **Editable daily titles:** customize the name of each session (e.g., *Push Day*, *Upper Body*, *Leg Day*).
+- **Exercise management:** add new exercises and edit or delete them inline (sets, reps, and weight in `kg`).
 
-## 🛠️ Stack tecnológico
+## 🛠️ Tech Stack
 
 - **Framework:** Next.js (App Router)
-- **Librería UI:** React + Tailwind CSS
-- **Lenguaje:** TypeScript
+- **UI Library:** React + Tailwind CSS
+- **Language:** TypeScript
 
-## 🚀 Instalación y ejecución en local
+## 🚀 Local Setup
 
-1. **Clona el repositorio e instala las dependencias:**
+1. **Clone the repository and install dependencies:**
    ```bash
-   git clone <url-de-tu-repo-frontend>
-   cd <nombre-carpeta-frontend>
+   git clone <your-frontend-repo-url>
+   cd <your-frontend-folder-name>
    npm install
    ```
 
-2. **Configura las variables de entorno:**
-   Crea un archivo `.env` local en la raíz del proyecto con la URL del backend:
+2. **Configure environment variables:**
+   Create a `.env.local` file in the root directory with your backend URL:
    ```env
    NEXT_PUBLIC_BACKEND_URL=http://localhost:3001
    ```
 
-3. **Inicia el servidor de desarrollo:**
+3. **Start the development server:**
    ```bash
    npm run dev
    ```
 
-Abre `http://localhost:3000` en tu navegador para empezar a usar la aplicación.
+Open `http://localhost:3000` in your browser to start using the app.
