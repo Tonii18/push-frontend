@@ -10,6 +10,7 @@ import {
   getByDay,
   Routine,
   updateExercise,
+  updateRoutineTitle,
 } from "@/app/services/routine.service";
 
 const validDays = [
@@ -50,6 +51,9 @@ function DayRoutineContent() {
   const [editSets, setEditSets] = useState("");
   const [editReps, setEditReps] = useState("");
   const [editWeight, setEditWeight] = useState("");
+
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [titleInput, setTitleInput] = useState("");
 
   const handleUnauthorized = useCallback(() => {
     localStorage.removeItem("access_token");
@@ -175,12 +179,12 @@ function DayRoutineContent() {
         prev.map((item) =>
           item.id === exerciseId
             ? updated ?? {
-                ...item,
-                name: editName.trim(),
-                sets: parsedSets,
-                reps: parsedReps,
-                weight: parsedWeight,
-              }
+              ...item,
+              name: editName.trim(),
+              sets: parsedSets,
+              reps: parsedReps,
+              weight: parsedWeight,
+            }
             : item
         )
       );
@@ -214,6 +218,30 @@ function DayRoutineContent() {
     }
   };
 
+  const handleUpdateTitle = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!token || !titleInput.trim()) return;
+
+    setError(null);
+    try {
+      const updated = await updateRoutineTitle(day, token, titleInput.trim());
+      setRoutine((prev) =>
+        prev
+          ? { ...prev, title: updated.title }
+          : { ...updated, exercises }
+      );
+      setIsEditingTitle(false);
+    } catch (err) {
+      if (err instanceof Error && err.message === "Unauthorized") {
+        handleUnauthorized();
+        return;
+      }
+      setError(
+        err instanceof Error ? err.message : "Error while updating title"
+      );
+    }
+  };
+
   const dayLabel = day ? day.charAt(0).toUpperCase() + day.slice(1) : "";
 
   return (
@@ -237,12 +265,55 @@ function DayRoutineContent() {
         {/* Day's title */}
 
         <section className="mt-10">
-          <p className="text-xs font-medium tracking-[0.15em] text-[#c6f135] uppercase">
+          <p className="text-xs font-medium tracking-[0.22em] text-[#c6f135] uppercase">
             Routine
           </p>
-          <h1 className="mt-2 text-4xl font-semibold tracking-tight">
-            {routine?.title || `${dayLabel} Workout`}
-          </h1>
+
+          {isEditingTitle ? (
+            <form
+              onSubmit={handleUpdateTitle}
+              className="mt-2 flex flex-wrap items-center gap-3"
+            >
+              <input
+                type="text"
+                value={titleInput}
+                onChange={(e) => setTitleInput(e.target.value)}
+                placeholder="e.g. Push Day, Upper Body..."
+                autoFocus
+                required
+                className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-2xl font-semibold text-[#f3f6ef] focus:border-[#c6f135] focus:outline-none sm:text-3xl"
+              />
+              <button
+                type="submit"
+                className="rounded-xl bg-[#c6f135] px-4 py-2 text-xs font-semibold text-[#12160f]"
+              >
+                Save
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsEditingTitle(false)}
+                className="rounded-xl border border-white/15 px-4 py-2 text-xs text-[#a7b0a2] hover:text-white"
+              >
+                Cancel
+              </button>
+            </form>
+          ) : (
+            <div className="mt-2 flex flex-wrap items-center gap-4">
+              <h1 className="text-4xl font-semibold tracking-tight">
+                {routine?.title || `${dayLabel} Workout`}
+              </h1>
+              <button
+                type="button"
+                onClick={() => {
+                  setTitleInput(routine?.title || "");
+                  setIsEditingTitle(true);
+                }}
+                className="rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-[#a7b0a2] transition hover:border-white/25 hover:text-white"
+              >
+                Edit title
+              </button>
+            </div>
+          )}
         </section>
 
         {/* Error message */}

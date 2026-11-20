@@ -31,6 +31,10 @@ export interface UpdateExerciseInput {
     weight?: number | null;
 }
 
+export interface UpdateRoutineTitle {
+    title?: string | null;
+}
+
 export async function getByDay(day: string, token: string) {
 
     const endpoint = `/routines/${day}`;
@@ -123,4 +127,29 @@ export async function deleteExercise(exerciseId: string, token: string) {
     if(!response.ok) {
         throw new Error('Error while deleting an exercise');
     }
+}
+
+export async function updateRoutineTitle(day: string, token: string, title: string) {
+
+    const endpoint = `/routines/${day}`;
+    const response = await fetch(BACKEND_URL + endpoint, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({title}),
+    });
+
+    if(response.status == 401) {
+        throw new Error('Unauthorized');
+    }
+
+    if(!response.ok) {
+        throw new Error('Error while editing routine name');
+    }
+
+    const text = await response.text();
+
+    return text ? JSON.parse(text) : null;
 }
