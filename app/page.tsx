@@ -94,6 +94,7 @@ export default function Home() {
             </p>
 
             {/* Error alert: It is showed up if errorMessage has content */}
+            
             {errorMessage && (
               <div className="mt-6 rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-400">
                 {errorMessage}
@@ -121,12 +122,6 @@ export default function Home() {
                   <label htmlFor="password" className="text-sm font-medium">
                     Password
                   </label>
-                  <button
-                    type="button"
-                    className="text-sm text-[#c6f135] transition hover:text-[#d8ff6a]"
-                  >
-                    Forgot password
-                  </button>
                 </div>
                 <div className="relative">
                   <input
@@ -149,15 +144,6 @@ export default function Home() {
                   </button>
                 </div>
               </div>
-
-              <label className="flex items-center gap-3 text-sm text-[#c5cec0]">
-                <input
-                  type="checkbox"
-                  name="remember"
-                  className="size-4 rounded border-white/20 bg-[#0c100b] accent-[#c6f135]"
-                />
-                Keep me signed in on this device
-              </label>
 
               <button
                 type="submit"

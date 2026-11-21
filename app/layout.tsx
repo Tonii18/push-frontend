@@ -9,8 +9,34 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Push — Sign in",
-  description: "Sign in to track your gym routines.",
+  metadataBase: new URL("https://pushtracker.vercel.app"),
+  title: {
+    default: "Push — Track your gym routines",
+    template: "%s | Push",
+  },
+  description: "Plan your workouts, log your sets and track your progress.",
+  applicationName: "Push",
+  openGraph: {
+    title: "Push — Track your gym routines",
+    description: "Plan your workouts, log your sets and track your progress.",
+    url: "https://pushtracker.vercel.app",
+    siteName: "Push",
+    type: "website",
+    locale: "en_US",
+    images: [
+      {
+        url: "/push-image.png",
+        width: 1200,
+        height: 743,
+        alt: "Push | Track your gym routines",
+      }
+    ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Push — Track your gym routines",
+    description: "Plan your workouts, log your sets and track your progress.",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
