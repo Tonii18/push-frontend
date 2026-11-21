@@ -49,6 +49,10 @@ export default function HomePage() {
     router.push("/");
   };
 
+  const handleCalendar = () => {
+    router.push("/calendar");
+  }
+
   return (
     <div className="flex min-h-dvh flex-1 bg-[#10140f] font-sans text-[#f3f6ef]"> 
       <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col px-6 py-10 sm:px-10 lg:py-14">
@@ -62,6 +66,7 @@ export default function HomePage() {
             </span>
             <span className="text-sm font-semibold tracking-[0.28em]">PUSH</span>
           </div>
+
           <button
             onClick={handleLogout}
             className="text-sm text-[#a7b0a2] transition hover:text-white"
@@ -129,6 +134,36 @@ export default function HomePage() {
             })}
           </div>
         </section>
+
+        <button
+          type="button"
+          onClick={handleCalendar}
+          className="group flex w-full items-center justify-between rounded-2xl border mt-5 border-[#c6f135] bg-[#c6f135] p-5 text-left text-[#12160f] transition hover:brightness-95"
+        >
+          <div className="flex items-center gap-4">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#12160f]/10 text-[#12160f] transition group-hover:bg-[#12160f]/15">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-5 w-5"
+              >
+                <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+                <line x1="16" x2="16" y1="2" y2="6" />
+                <line x1="8" x2="8" y1="2" y2="6" />
+                <line x1="3" x2="21" y1="10" y2="10" />
+              </svg>
+            </span>
+            <div>
+              <p className="text-base font-semibold text-[#12160f]">My Calendar</p>
+              <p className="text-xs text-[#12160f]/75">Tap to view your workouts history</p>
+            </div>
+          </div>
+        </button>
 
       </div>
     </div>

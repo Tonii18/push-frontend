@@ -12,6 +12,7 @@ import {
   updateExercise,
   updateRoutineTitle,
 } from "@/app/services/routine.service";
+import { createWorkoutLog } from "@/app/services/worklog.service";
 
 const validDays = [
   "monday",
@@ -54,6 +55,9 @@ function DayRoutineContent() {
 
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [titleInput, setTitleInput] = useState("");
+
+  const [markingDone, setMarkingDone] = useState(false);
+  const [workoutDone, setWorkoutDone] = useState(false);
 
   const handleUnauthorized = useCallback(() => {
     localStorage.removeItem("access_token");
@@ -239,6 +243,28 @@ function DayRoutineContent() {
       setError(
         err instanceof Error ? err.message : "Error while updating title"
       );
+    }
+  };
+
+  const handleMarkDone = async () => {
+    if (!token || !routine?.id) return;
+
+    setMarkingDone(true);
+    setError(null);
+    try {
+      await createWorkoutLog(routine.id, token);
+      setWorkoutDone(true);
+      setTimeout(() => setWorkoutDone(false), 3000);
+    } catch (err) {
+      if (err instanceof Error && err.message === "Unauthorized") {
+        handleUnauthorized();
+        return;
+      }
+      setError(
+        err instanceof Error ? err.message : "Error while saving your workout"
+      );
+    } finally {
+      setMarkingDone(false);
     }
   };
 
@@ -505,6 +531,25 @@ function DayRoutineContent() {
             </div>
           )}
         </section>
+
+        {/* Mark day as done */}
+
+        {!loading && routine?.id && (
+          <div className="mt-8 flex justify-end">
+            <button
+              type="button"
+              onClick={handleMarkDone}
+              disabled={markingDone}
+              className="rounded-xl bg-[#c6f135] px-6 py-3 text-sm font-semibold text-[#12160f] transition hover:brightness-105 disabled:opacity-50"
+            >
+              {markingDone
+                ? "Saving..."
+                : workoutDone
+                  ? "Done! ✓"
+                  : "Mark day as done"}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
